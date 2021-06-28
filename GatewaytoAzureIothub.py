@@ -56,15 +56,15 @@ def message_received_handler(message):
 	try:
 		TestValue = message.data.decode('utf-8')
 		size = len(TestValue)
-		http://mail2.multitech.com:32224/?dmVyPTEuMDAxJiY2M2M4Y2RhYTEyZDAzNGQyZj02MENBODRBNF81MDQ5MF80MDA1XzEmJmQ2ZGVmNjRkN2IzNjNiND0yMzMzJiZ1cmw9bG9nZ2VyJTJFaW5mbw== ( "Received Message [%d]:" % RECEIVE_CALLBACKS )
-		http://mail2.multitech.com:32224/?dmVyPTEuMDAxJiY2M2M4Y2RhYTEyZDAzNGQyZj02MENBODRBNF81MDQ5MF80MDA1XzEmJmQ2ZGVmNjRkN2IzNjNiND0yMzMzJiZ1cmw9bG9nZ2VyJTJFaW5mbw== ( "    Data: <<<%s>>> & Size=%d" % (TestValue, size) )
+		logger.info ( "Received Message [%d]:" % RECEIVE_CALLBACKS )
+		logger.info ( "    Data: <<<%s>>> & Size=%d" % (TestValue, size) )
 		TestDevEUI = TestValue.split('|')[0]
 		TestData = TestValue.split('|')[1]
-		http://mail2.multitech.com:32224/?dmVyPTEuMDAxJiY2M2M4Y2RhYTEyZDAzNGQyZj02MENBODRBNF81MDQ5MF80MDA1XzEmJmQ2ZGVmNjRkN2IzNjNiND0yMzMzJiZ1cmw9bG9nZ2VyJTJFaW5mbw== ( "    DevEUI: %s, Data=%s" % (TestDevEUI, TestData) )
+		logger.info ( "    DevEUI: %s, Data=%s" % (TestDevEUI, TestData) )
 		publish.single("lora/" + TestDevEUI + "/down", '{ "data":"' + TestData + '" }', hostname="127.0.0.1")
-		http://mail2.multitech.com:32224/?dmVyPTEuMDAxJiY2M2M4Y2RhYTEyZDAzNGQyZj02MENBODRBNF81MDQ5MF80MDA1XzEmJmQ2ZGVmNjRkN2IzNjNiND0yMzMzJiZ1cmw9bG9nZ2VyJTJFaW5mbw== ( "    Properties: %s" % message.custom_properties )
+		logger.info ( "    Properties: %s" % message.custom_properties )
 		RECEIVE_CALLBACKS += 1
-		http://mail2.multitech.com:32224/?dmVyPTEuMDAxJiY2M2M4Y2RhYTEyZDAzNGQyZj02MENBODRBNF81MDQ5MF80MDA1XzEmJmQ2ZGVmNjRkN2IzNjNiND0yMzMzJiZ1cmw9bG9nZ2VyJTJFaW5mbw== ( "    Total calls received: %d" % RECEIVE_CALLBACKS )
+		logger.info ( "    Total calls received: %d" % RECEIVE_CALLBACKS )
 	except Exception as e:
 		logger.exception(e)
 
@@ -81,11 +81,11 @@ async def iothub_client_init():
 
 def send_message(client, message, counter):
 	try:
-		loop = http://mail2.multitech.com:32224/?dmVyPTEuMDAxJiY2ZWQ0ZDNhMzE0Y2I3NTk1Zj02MENBODRBNF81MDQ5MF80MDA1XzEmJmQ2ZWY3NjljYmFkNmFiMj0yMzMzJiZ1cmw9YXN5bmNpbyUyRW5ldw==_event_loop()
+		loop = asyncio.new_event_loop()
 		asyncio.set_event_loop(loop)
-		http://mail2.multitech.com:32224/?dmVyPTEuMDAxJiY2M2M4YzViZDU5ZDA2ZmQ1Zj02MENBODRBNF81MDQ5MF80MDA1XzEmJmY2NGVmNzg5NmE2NzFiZj0yMzMzJiZ1cmw9bG9vcCUyRXJ1bg==_until_complete(client.send_message(message))
+		loop.run_until_complete(client.send_message(message))
 		loop.close()
-		http://mail2.multitech.com:32224/?dmVyPTEuMDAxJiY2M2M4Y2RhYTEyZDAzNGQyZj02MENBODRBNF81MDQ5MF80MDA1XzEmJmQ2ZGVmNjRkN2IzNjNiND0yMzMzJiZ1cmw9bG9nZ2VyJTJFaW5mbw==("Message [%d] sent." % counter)
+		logger.info("Message [%d] sent." % counter)
 		counter += 1
 	except Exception as e:
 		logger.exception(e)
@@ -95,11 +95,11 @@ async def iothub_client_sample_run():
 		iothub_client = await iothub_client_init()
 	
 		# send a few messages every minute
-		http://mail2.multitech.com:32224/?dmVyPTEuMDAxJiY2M2M4Y2RhYTEyZDAzNGQyZj02MENBODRBNF81MDQ5MF80MDA1XzEmJmQ2ZGVmNjRkN2IzNjNiND0yMzMzJiZ1cmw9bG9nZ2VyJTJFaW5mbw==( "IoTHubClient sending %d messages" % MESSAGE_COUNT )
+		logger.info( "IoTHubClient sending %d messages" % MESSAGE_COUNT )
 
 		def on_connect(client, userdata, flags, rc):
 			try:
-				http://mail2.multitech.com:32224/?dmVyPTEuMDAxJiY2M2M4Y2RhYTEyZDAzNGQyZj02MENBODRBNF81MDQ5MF80MDA1XzEmJmQ2ZGVmNjRkN2IzNjNiND0yMzMzJiZ1cmw9bG9nZ2VyJTJFaW5mbw==("Connection returned " + str(rc))
+				logger.info("Connection returned " + str(rc))
 				# Subscribing in on_connect() means that if we lose the connection and
 				# reconnect then subscriptions will be renewed.
 				client.subscribe("lora/+/up")
@@ -128,7 +128,7 @@ async def iothub_client_sample_run():
 					message.content_encoding = "utf-8"
 					thread = threading.Thread(target=send_message, args=(iothub_client,message,message_counter))
 					thread.start()
-					http://mail2.multitech.com:32224/?dmVyPTEuMDAxJiY2M2M4Y2RhYTEyZDAzNGQyZj02MENBODRBNF81MDQ5MF80MDA1XzEmJmQ2ZGVmNjRkN2IzNjNiND0yMzMzJiZ1cmw9bG9nZ2VyJTJFaW5mbw==( "IoTHubDeviceClient.send_message accepted message [%d] for transmission to IoT Hub.", message_counter )
+					logger.info( "IoTHubDeviceClient.send_message accepted message [%d] for transmission to IoT Hub.", message_counter )
 			except Exception as e:
 				logger.exception(e)
 
@@ -140,14 +140,14 @@ async def iothub_client_sample_run():
 		client.loop_forever()
 		
 		# Wait for Commands or exit
-		http://mail2.multitech.com:32224/?dmVyPTEuMDAxJiY2M2M4Y2RhYTEyZDAzNGQyZj02MENBODRBNF81MDQ5MF80MDA1XzEmJmQ2ZGVmNjRkN2IzNjNiND0yMzMzJiZ1cmw9bG9nZ2VyJTJFaW5mbw==( "IoTHubClient waiting for commands, press Ctrl-C to exit" )
+		logger.info( "IoTHubClient waiting for commands, press Ctrl-C to exit" )
 		time.sleep(1)
 
 	except (ChainableException, ClientError) as iothub_error:
 		logger.exception("Unexpected error from IoTHub:", iothub_error)
 		return
 	except KeyboardInterrupt:
-		http://mail2.multitech.com:32224/?dmVyPTEuMDAxJiY2M2M4Y2RhYTEyZDAzNGQyZj02MENBODRBNF81MDQ5MF80MDA1XzEmJmQ2ZGVmNjRkN2IzNjNiND0yMzMzJiZ1cmw9bG9nZ2VyJTJFaW5mbw==("IoTHubClient sample stopped")
+		logger.info("IoTHubClient sample stopped")
 	except Exception as e:
 		logger.exception(e)
 
@@ -177,7 +177,7 @@ if __name__ == '__main__':
 	print ( "    Connection string=%s" % CONNECTION_STRING )
 
 	loop = asyncio.get_event_loop()
-	http://mail2.multitech.com:32224/?dmVyPTEuMDAxJiY2M2M4YzViZDU5ZDA2ZmQ1Zj02MENBODRBNF81MDQ5MF80MDA1XzEmJmY2NGVmNzg5NmE2NzFiZj0yMzMzJiZ1cmw9bG9vcCUyRXJ1bg==_until_complete(iothub_client_sample_run())
+	loop.run_until_complete(iothub_client_sample_run())
 	loop.close()
 
 # Blocking call that processes network traffic, dispatches callbacks and
