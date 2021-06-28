@@ -1,5 +1,5 @@
-## Gateway to Azure IoT Hub
-# Guide to setting up the Python3 program to Azure.
+# Gateway to Azure IoT Hub
+## Guide to setting up the Python3 program to Azure.
 
 SSH into your gateway (make sure that setting is enabled on your gateway under admin, access configuration)
 
