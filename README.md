@@ -5,10 +5,11 @@ SSH into your gateway (make sure that setting is enabled on your gateway under a
 
 Log in with your username and password.
 
-Run “sudo -s” and enter your password again. This will switch you into the root user account.
-Run “opkg update”.
-Run “opkg install python3-pip”. This will install the required python3 files to install the azure-iot-device Package, this may take a few minutes.
-Run “pip3 install azure-iot-device”, this will install all the files required for the azure iothub sdk to function.
+- Run “sudo -s” and enter your password again. This will switch you into the root user account.
+- Run “opkg update”.
+- Run “opkg install python3-pip”. This will install the required python3 files to install the azure-iot-device Package, this may take a few minutes.
+- Run “pip3 install azure-iot-device”, this will install all the files required for the azure iothub sdk to function.
+
 Set up your IoT Device connection string in the GatewaytoAzureIothub.py file.
 The line to edit is 32. 
 Load the GatewaytoAzureIothub.py file onto the gateway in the /var/config/home/admin directory.
