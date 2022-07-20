@@ -8,7 +8,8 @@ Log in with your username and password.
 - Run “sudo -s” and enter your password again. This will switch you into the root user account.
 - Run “opkg update”.
 - Run “opkg install python3-pip”. This will install the required python3 files to install the azure-iot-device Package, this may take a few minutes.
-- Run “pip3 install azure-iot-device”, this will install all the files required for the azure iothub sdk to function.
+- Run “pip3 install azure-iot-device==2.6.0”, this will install all the files required for the azure iothub sdk to function.
+If you don't use "==2.6.0" you will get an "ERROR: requests 2.23.0 has requirement urllib3!=1.25.0,!=1.25.1,<1.26,>=1.21.1, but you'll have urllib3 1.26.10 which is incompatible".
 
 Set up your IoT Device connection string in the GatewaytoAzureIothub.py file.
 The line to edit is 32. 
